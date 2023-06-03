@@ -10,13 +10,20 @@ async def GetDolar():
   headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'}
   atributos = [{'id':'nacional'}, {'class':'DFlfde SwHCTb'}]
   returns = ['value', 'data-value']
+  locs = ['input','span']
   i = 0
 
+  while (i < len(url)):
+    page = requests.get(url[i], headers=headers)
+    if page.status_code == 200:
+      soup = BeautifulSoup(page.content, 'html.parser')
+      dollar = soup.find_all(locs[i], attrs=atributos[i])[0]
+      return {'dollar': dollar[returns[i]]}
+    else:
+      i+=1
 
-  page = requests.get(url[i], headers=headers)
-  #print(page.content)
-  soup = BeautifulSoup(page.content, 'html.parser')
-  dollar = soup.find_all('input', attrs=atributos[i])[0]
-
-  return {'dollar': dollar[returns[i]]}
+  if i >= len(url):
+    return 502
+  else:
+    pass
 
