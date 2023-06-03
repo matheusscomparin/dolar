@@ -14,11 +14,8 @@ async def GetDolar():
 
 
   page = requests.get(url[i], headers=headers)
-  print(page.content)
-
+  #print(page.content)
   soup = BeautifulSoup(page.content, 'html.parser')
-
- 
   dollar = soup.find_all('input', attrs=atributos[i])[0]
 
   return {'dollar': dollar[returns[i]]}
