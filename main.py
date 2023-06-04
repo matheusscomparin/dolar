@@ -1,11 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-from fastapi import FastAPI
+from fastapi import FastAPI, status, Response
 
 app = FastAPI()
 
-@app.get("/")
-async def GetDolar():
+@app.get("/", status_code=200)
+async def GetDolar(response: Response):
   url = ['https://dolarhoje.com/', 'https://www.google.com/search?q=dolar+hoje&oq=dolar&aqs=chrome.0.35i39i650j69i59j0i67i433i650l2j0i67i650j0i67i433i650j0i67i131i433i650j69i60.681j0j4&sourceid=chrome&ie=UTF-8']
   headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'}
   atributos = [{'id':'nacional'}, {'class':'DFlfde SwHCTb'}]
@@ -22,8 +22,7 @@ async def GetDolar():
     else:
       i+=1
 
-  if i >= len(url):
-    return 502
-  else:
-    pass
+  response.status_code = status.HTTP_404_NOT_FOUND
+  
+
 
