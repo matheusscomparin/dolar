@@ -1,8 +1,10 @@
 import requests
+import redis
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, status, Response
 
 app = FastAPI()
+r = redis.StrictRedis(host='redis', port='6379', decode_responses=True)
 
 @app.get("/", status_code=200)
 async def GetDolar(response: Response):
@@ -18,11 +20,13 @@ async def GetDolar(response: Response):
     if page.status_code == 200:
       soup = BeautifulSoup(page.content, 'html.parser')
       dollar = soup.find_all(locs[i], attrs=atributos[i])[0]
-      return {'dollar': dollar[returns[i]]}
+      r.set('dollar', dollar[returns[i]])
+      return r.get('dollar')
+      #return {'dollar': dollar[returns[i]]}
     else:
       i+=1
 
   response.status_code = status.HTTP_404_NOT_FOUND
-  
+
 
 
